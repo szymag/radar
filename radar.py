@@ -28,12 +28,16 @@ if __name__ == "__main__":
     red_airplane = pygame.image.load('red_airplane.png')
     green_airplane = pygame.image.load('green_airplane.png')
 
+    effect = pygame.mixer.music.load('radar_sound.wav')
+    pygame.mixer.music.play()
+
     screen = pygame.display.get_surface()
     print_objects((background, (0, 0)), (green_airplane, (500, 700)),
                   (green_airplane, (300, 300)), (red_airplane, (600, 600)),
                   (radar, (0, 90)))
     pygame.display.flip()
-
+    SONG_END = pygame.USEREVENT + 1
+    pygame.mixer.music.set_endevent(SONG_END)
     angle = 0
 
     while True:
@@ -49,3 +53,5 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == QUIT:
                 sys.exit(0)
+            if event.type == SONG_END:
+                pygame.mixer.music.play()
