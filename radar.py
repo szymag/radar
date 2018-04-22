@@ -1,5 +1,6 @@
 import pygame
 import sys
+import os
 import time
 import subprocess
 
@@ -114,8 +115,8 @@ if __name__ == "__main__":
         screen.fill((30, 30, 30))
         for box in input_boxes:
             box.draw(screen)
-
     pygame.mixer.music.stop()
     time.sleep(2)
-    subprocess.call(['/usr/bin/xplayer', '/home/szymag/python/escape_room/movie.mp4'])
+    if os.path.islink("/home/szymag/python/escape_room/movie.mp4"):
+        subprocess.call(['/usr/bin/xplayer', '/home/szymag/python/escape_room/movie.mp4'])
     sys.exit(0)
