@@ -3,24 +3,31 @@ import sys
 import os
 import time
 import subprocess
+import math
 
 from pygame.locals import *
 from text_box import TextBox
 
 window = pygame.display.set_mode((1024, 768))
 key_words = ['40401010', 'test', 'test', 'test', 'test']
+radar_center = (0, 61)
+working_time = 30 * 60
 
 
 class Graphics:
     def __init__(self, graphic, init_position):
         self.init_position = init_position
         self.graphic = graphic
+        self.time = 0
 
     def position(self):
         return self.init_position
 
     def name(self):
         return self.graphic
+
+    def tim(self):
+        return self.time
 
 
 def rotate_radar(image, angle):
@@ -36,6 +43,21 @@ def rotate_radar(image, angle):
 def print_objects(*args):
     for i in args:
         screen.blit(i.name(), i.position())
+
+
+def calculate_common_angle(position):
+    radar_shift = (320, 320)
+    x = position[0] - radar_shift[0] - radar_center[0]
+    y = position[1] - radar_shift[1] - radar_center[1]
+    return 180 - abs(math.degrees(math.atan2(x, y)))
+
+
+def calculate_movement(time_part, plane):
+    pl_position = plane.position()
+    center = radar_center[0] + 320, radar_center[1] + 320
+    distance = center[0] - pl_position[0], center[1] - pl_position[1]
+    movement = [i - (1 - (time_part / working_time)) * i for i, j in zip(distance, center)]
+    return pl_position[0] + movement[0], pl_position[1] + movement[1]
 
 
 if __name__ == "__main__":
@@ -60,7 +82,7 @@ if __name__ == "__main__":
     plane_1 = Graphics(green_airplane, (60, 170))
     plane_2 = Graphics(green_airplane, (100, 210))
     plane_3 = Graphics(green_airplane, (30, 300))
-    plane_4 = Graphics(green_airplane, (300, 70))
+    plane_4 = Graphics(green_airplane, (250, 70))
     plane_5 = Graphics(green_airplane, (60, 400))
     printed_objects = [background, plane_1, plane_2, plane_3, plane_4, plane_5]
     print_objects(*printed_objects)
@@ -72,7 +94,9 @@ if __name__ == "__main__":
 
     radar_angle = 0
     condition = True
+    start_time = time.time()
     while condition:
+        current_time = time.time() - start_time
         if all(i[0] == i[1] for i in zip(key_words,
                                          (input_box1.text, input_box2.text,
                                           input_box3.text, input_box4.text, input_box5.text))):
@@ -99,12 +123,29 @@ if __name__ == "__main__":
         else:
             setattr(plane_5, 'graphic', green_airplane)
 
+        if abs(radar_angle - calculate_common_angle(plane_1.position()) - 2) < 0.5:
+            setattr(plane_1, 'init_position', calculate_movement(current_time - plane_1.tim(), plane_1))
+            setattr(plane_1, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(plane_2.position()) - 2) < 0.5:
+            setattr(plane_2, 'init_position', calculate_movement(current_time - plane_2.tim(), plane_2))
+            setattr(plane_2, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(plane_3.position()) - 2) < 0.5:
+            setattr(plane_3, 'init_position', calculate_movement(current_time - plane_3.tim(), plane_3))
+            setattr(plane_3, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(plane_4.position()) - 2) < 0.5:
+            setattr(plane_4, 'init_position', calculate_movement(current_time - plane_4.tim(), plane_4))
+            setattr(plane_4, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(plane_5.position())) < 0.5:
+            setattr(plane_5, 'init_position', calculate_movement(current_time - plane_5.tim(), plane_5))
+            setattr(plane_5, 'time', current_time)
+
         rot_radar = rotate_radar(radar, radar_angle)
         print_objects(*printed_objects)
-        screen.blit(rot_radar, (0, 61))
+        screen.blit(rot_radar, radar_center)
 
         pygame.display.update()
         radar_angle += 1
+        radar_angle %= 360
         for event in pygame.event.get():
             if event.type == QUIT:
                 sys.exit(0)
