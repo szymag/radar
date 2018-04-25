@@ -52,8 +52,8 @@ def calculate_common_angle(position):
     return 180 - abs(math.degrees(math.atan2(x, y)))
 
 
-def calculate_movement(time_part, plane):
-    pl_position = plane.position()
+def calculate_movement(time_part, meteor):
+    pl_position = meteor.position()
     center = radar_center[0] + 320, radar_center[1] + 320
     distance = center[0] - pl_position[0], center[1] - pl_position[1]
     movement = [i - (1 - (time_part / working_time)) * i for i, j in zip(distance, center)]
@@ -76,15 +76,28 @@ if __name__ == "__main__":
     pygame.display.set_caption('Radar')
     background = pygame.image.load('background.png')
     radar = pygame.image.load('radar.png')
-    red_airplane = pygame.image.load('red_airplane.png')
-    green_airplane = pygame.image.load('green_airplane.png')
+    red_meteor = pygame.image.load('red_meteor.png')
+    green_meteor = pygame.image.load('green_meteor.png')
+    alpha = pygame.image.load('alpha.png')
+    beta = pygame.image.load('beta.png')
+    gamma = pygame.image.load('gamma.png')
+    delta = pygame.image.load('delta.png')
+    lambda_ = pygame.image.load('lambda.png')
+    text = pygame.image.load('text.png')
     background = Graphics(background, (0, 0))
-    plane_1 = Graphics(green_airplane, (60, 170))
-    plane_2 = Graphics(green_airplane, (100, 210))
-    plane_3 = Graphics(green_airplane, (30, 300))
-    plane_4 = Graphics(green_airplane, (250, 70))
-    plane_5 = Graphics(green_airplane, (60, 400))
-    printed_objects = [background, plane_1, plane_2, plane_3, plane_4, plane_5]
+    meteor_1 = Graphics(green_meteor, (40, 170))
+    meteor_2 = Graphics(green_meteor, (100, 210))
+    meteor_3 = Graphics(green_meteor, (20, 300))
+    meteor_4 = Graphics(green_meteor, (250, 70))
+    meteor_5 = Graphics(green_meteor, (60, 400))
+    alpha = Graphics(alpha, (670, 305))
+    beta = Graphics(beta, (670, 350))
+    gamma = Graphics(gamma, (670, 405))
+    delta = Graphics(delta, (670, 450))
+    lambda_ = Graphics(lambda_, (670, 500))
+    text = Graphics(text, (700, 240))
+    printed_objects = [background, meteor_1, meteor_2, meteor_3, meteor_4, meteor_5,
+                       alpha, beta, gamma, delta, lambda_, text]
     print_objects(*printed_objects)
 
     effect = pygame.mixer.music.load('radar_sound.wav')
@@ -103,41 +116,41 @@ if __name__ == "__main__":
             condition = False
 
         if input_box1.text == key_words[0]:
-            setattr(plane_1, 'graphic', red_airplane)
+            setattr(meteor_1, 'graphic', red_meteor)
         else:
-            setattr(plane_1, 'graphic', green_airplane)
+            setattr(meteor_1, 'graphic', green_meteor)
         if input_box2.text == key_words[1]:
-            setattr(plane_2, 'graphic', red_airplane)
+            setattr(meteor_2, 'graphic', red_meteor)
         else:
-            setattr(plane_2, 'graphic', green_airplane)
+            setattr(meteor_2, 'graphic', green_meteor)
         if input_box3.text == key_words[2]:
-            setattr(plane_3, 'graphic', red_airplane)
+            setattr(meteor_3, 'graphic', red_meteor)
         else:
-            setattr(plane_3, 'graphic', green_airplane)
+            setattr(meteor_3, 'graphic', green_meteor)
         if input_box4.text == key_words[3]:
-            setattr(plane_4, 'graphic', red_airplane)
+            setattr(meteor_4, 'graphic', red_meteor)
         else:
-            setattr(plane_4, 'graphic', green_airplane)
+            setattr(meteor_4, 'graphic', green_meteor)
         if input_box5.text == key_words[4]:
-            setattr(plane_5, 'graphic', red_airplane)
+            setattr(meteor_5, 'graphic', red_meteor)
         else:
-            setattr(plane_5, 'graphic', green_airplane)
+            setattr(meteor_5, 'graphic', green_meteor)
 
-        if abs(radar_angle - calculate_common_angle(plane_1.position()) - 2) < 0.5:
-            setattr(plane_1, 'init_position', calculate_movement(current_time - plane_1.tim(), plane_1))
-            setattr(plane_1, 'time', current_time)
-        if abs(radar_angle - calculate_common_angle(plane_2.position()) - 2) < 0.5:
-            setattr(plane_2, 'init_position', calculate_movement(current_time - plane_2.tim(), plane_2))
-            setattr(plane_2, 'time', current_time)
-        if abs(radar_angle - calculate_common_angle(plane_3.position()) - 2) < 0.5:
-            setattr(plane_3, 'init_position', calculate_movement(current_time - plane_3.tim(), plane_3))
-            setattr(plane_3, 'time', current_time)
-        if abs(radar_angle - calculate_common_angle(plane_4.position()) - 2) < 0.5:
-            setattr(plane_4, 'init_position', calculate_movement(current_time - plane_4.tim(), plane_4))
-            setattr(plane_4, 'time', current_time)
-        if abs(radar_angle - calculate_common_angle(plane_5.position())) < 0.5:
-            setattr(plane_5, 'init_position', calculate_movement(current_time - plane_5.tim(), plane_5))
-            setattr(plane_5, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(meteor_1.position()) - 2) < 0.5:
+            setattr(meteor_1, 'init_position', calculate_movement(current_time - meteor_1.tim(), meteor_1))
+            setattr(meteor_1, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(meteor_2.position()) - 2) < 0.5:
+            setattr(meteor_2, 'init_position', calculate_movement(current_time - meteor_2.tim(), meteor_2))
+            setattr(meteor_2, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(meteor_3.position()) - 2) < 0.5:
+            setattr(meteor_3, 'init_position', calculate_movement(current_time - meteor_3.tim(), meteor_3))
+            setattr(meteor_3, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(meteor_4.position()) - 2) < 0.5:
+            setattr(meteor_4, 'init_position', calculate_movement(current_time - meteor_4.tim(), meteor_4))
+            setattr(meteor_4, 'time', current_time)
+        if abs(radar_angle - calculate_common_angle(meteor_5.position())) < 0.5:
+            setattr(meteor_5, 'init_position', calculate_movement(current_time - meteor_5.tim(), meteor_5))
+            setattr(meteor_5, 'time', current_time)
 
         rot_radar = rotate_radar(radar, radar_angle)
         print_objects(*printed_objects)
